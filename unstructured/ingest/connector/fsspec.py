@@ -88,6 +88,7 @@ class FsspecIngestDoc(IngestDocCleanupMixin, BaseSingleIngestDoc):
         fs: AbstractFileSystem = get_filesystem_class(self.connector_config.protocol)(
             **self.connector_config.get_access_kwargs(),
         )
+        #### look into this here...
         logger.debug(f"Fetching {self} - PID: {os.getpid()}")
         self._get_file(fs=fs)
         fs.get(rpath=self.remote_file_path, lpath=self._tmp_download_file().as_posix())

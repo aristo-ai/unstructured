@@ -108,10 +108,14 @@ class DocFactoryNode(PipelineNode):
     source_doc_connector: BaseSourceConnector
 
     def initialize(self):
+        # breakpoint()
+        masked_source_doc_connector = self.source_doc_connector.to_dict()
+        masked_source_doc_connector["connector_config"]["access_kwargs"] = "REDACTED"
         logger.info(
             f"Running doc factory to generate ingest docs. "
-            f"Source connector: {self.source_doc_connector.to_json()}",
+            f"Source connector: {masked_source_doc_connector}",
         )
+        # breakpoint()
         super().initialize()
         self.source_doc_connector.initialize()
 
