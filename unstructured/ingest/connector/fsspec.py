@@ -31,16 +31,7 @@ from unstructured.utils import (
     requires_dependencies,
 )
 
-SUPPORTED_REMOTE_FSSPEC_PROTOCOLS = [
-    "s3",
-    "s3a",
-    "abfs",
-    "az",
-    "gs",
-    "gcs",
-    "box",
-    "dropbox",
-]
+from unstructured.ingest.cli.common import replace_sensitive_values
 
 
 @dataclass
@@ -89,7 +80,8 @@ class FsspecIngestDoc(IngestDocCleanupMixin, BaseSingleIngestDoc):
             **self.connector_config.get_access_kwargs(),
         )
         #### look into this here...
-        logger.debug(f"Fetching {self} - PID: {os.getpid()}")
+        # breakpoint()
+        logger.debug(f"Fetching {replace_sensitive_values(self.to_dict())} - PID: {os.getpid()}")
         self._get_file(fs=fs)
         fs.get(rpath=self.remote_file_path, lpath=self._tmp_download_file().as_posix())
         self.update_source_metadata()

@@ -22,6 +22,7 @@ from unstructured.ingest.interfaces import (
     RetryStrategyConfig,
 )
 from unstructured.ingest.logger import ingest_log_streaming_init, logger
+from unstructured.ingest.cli.common import replace_sensitive_values
 
 
 @dataclass
@@ -110,7 +111,7 @@ class DocFactoryNode(PipelineNode):
     def initialize(self):
         # breakpoint()
         masked_source_doc_connector = self.source_doc_connector.to_dict()
-        masked_source_doc_connector["connector_config"]["access_kwargs"] = "REDACTED"
+        masked_source_doc_connector = replace_sensitive_values(masked_source_doc_connector)
         logger.info(
             f"Running doc factory to generate ingest docs. "
             f"Source connector: {masked_source_doc_connector}",
